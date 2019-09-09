@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePublisherTable extends Migration
+class CreateAuthorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatePublisherTable extends Migration
      */
     public function up()
     {
-        Schema::create('publisher', function (Blueprint $table) {
+        Schema::create('authors', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name','100');
-            $table->text('address');
+            $table->string('kana','100');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreatePublisherTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('publisher');
+        Schema::dropIfExists('author');
     }
 }
