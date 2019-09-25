@@ -14,7 +14,7 @@ class ExportOrdersCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:export-orders';
+    protected $signature = 'app:export-orders {date} {--output=}';
 
     /**
      * The console command description.
@@ -45,8 +45,23 @@ class ExportOrdersCommand extends Command
      */
     public function handle()
     {
-        $tsv = $this->useCase->run(Carbon::today());
+        // ① 引数dateの値を取得する
+        $date = $this->argument('date');
+        // ② $dateの値（文字列）からCarbonインスタンスを生成
+        $targetDate = Carbon::createFromFormat('Ymd', $date);
 
-        echo $tsv;
+        // ③ ユースケースクラスに日付を渡す
+        $tsv = $this->useCase->run($targetDate);
+
+        // (1) outputオプションの値を取得
+        $outputFilePath = $this->option('output');
+
+        // (2) nullであれば未指定なので、標準出力に出力
+        if (is_null($outputFilePath)) {
+            echo $tsv;
+            return;
+        }
+        // (3) ファイルに出力
+        file_put_contents($outputFilePath, $tsv);
     }
 }
