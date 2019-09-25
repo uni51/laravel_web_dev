@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateOrderDetails extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -15,7 +16,6 @@ class CreateOrderDetails extends Migration
     public function up()
     {
         Schema::create('order_details', function (Blueprint $table) {
-            $table->increments('id');
             $table->string('order_code', 32);
             $table->integer('detail_no');
             $table->string('item_name', 100);
@@ -23,7 +23,8 @@ class CreateOrderDetails extends Migration
             $table->integer('quantity');
             $table->integer('subtotal_price');
 
-//            $table->primary(['order_code', 'detail_no']); //MySQL用の記述
+            // PK設定（「DUMMY_NAME」を設定しないと、マイグレーションで失敗する）
+            $table->primary(['order_code', 'detail_no'], 'DUMMY_NAME');
 
             $table->index('order_code');
             /** @noinspection PhpUndefinedMethodInspection */

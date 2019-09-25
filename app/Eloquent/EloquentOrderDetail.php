@@ -17,5 +17,11 @@ final class EloquentOrderDetail extends Model
 {
     protected $table = 'order_details';
 
+    // プライマリキー設定
+    protected $primaryKey = ['order_code', 'detail_no'];
+
+    // increment無効化
+    public $incrementing = false;
+
     public $timestamps = false;
 }
