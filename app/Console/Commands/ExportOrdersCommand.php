@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\UseCases\ExportOrdersUseCase;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class ExportOrdersCommand extends Command
@@ -21,14 +23,19 @@ class ExportOrdersCommand extends Command
      */
     protected $description = '購入情報を出力する';
 
+    /** @var ExportOrdersUseCase */
+    private $useCase;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ExportOrdersUseCase $useCase)
     {
         parent::__construct();
+
+        $this->useCase = $useCase;
     }
 
     /**
@@ -38,6 +45,8 @@ class ExportOrdersCommand extends Command
      */
     public function handle()
     {
-        $this->info('Hello');
+        $tsv = $this->useCase->run(Carbon::today());
+
+        echo $tsv;
     }
 }
