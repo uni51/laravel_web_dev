@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\UseCases\SendOrdersUseCase;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class SendOrdersCommand extends Command
@@ -11,7 +13,7 @@ class SendOrdersCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:send-orders';
+    protected $signature = 'app:send-orders {date}';
 
     /**
      * The console command description.
@@ -20,14 +22,16 @@ class SendOrdersCommand extends Command
      */
     protected $description = '購入情報を送信する';
 
+    /** @var SendOrdersUseCase */
+    private $useCase;
+
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * @param SendOrdersUseCase $useCase
      */
-    public function __construct()
+    public function __construct(SendOrdersUseCase $useCase)
     {
         parent::__construct();
+        $this->useCase = $useCase;
     }
 
     /**
@@ -37,6 +41,12 @@ class SendOrdersCommand extends Command
      */
     public function handle()
     {
+        // 引数dateの値を取得する
+        $date = $this->argument('date');
+        $targetDate = Carbon::createFromFormat('Ymd', $date);
+
+        $this->useCase->run($targetDate);
+
         $this->info('Send Orders');
     }
 }
